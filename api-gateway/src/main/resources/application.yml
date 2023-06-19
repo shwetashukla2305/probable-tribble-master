@@ -1,0 +1,47 @@
+server:
+  port: 8079
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
+
+spring doc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+spring:
+  application:
+    name: api-gateway
+
+  main:
+    web-application-type: reactive
+
+  cloud:
+    config:
+      import-check:
+        enabled: false
+
+    compatibility-verifier:
+      enabled: false
+    gateway:
+
+      routes:
+        - id: sim-activation
+          uri: lb://sim-activation
+          predicates:
+            - Path=/sim-activation/**
+
+
+
+        - id: user-validation
+          uri: lb://user-validation
+          predicates:
+            - Path=/user-validation/**
+
+        - id: swagger-ui
+          uri: lb://swagger-ui
+          predicates:
+            - Path=/my-swagger-ui/**
